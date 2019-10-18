@@ -1,0 +1,11 @@
+C:\Users\scc\source\repos\TcpIp\TcpServer\bin\Debug\netcoreapp3.0\TcpServer.exe
+C:\Users\scc\source\repos\TcpIp\TcpServer\bin\Debug\netcoreapp3.0\TcpServer.deps.json
+C:\Users\scc\source\repos\TcpIp\TcpServer\bin\Debug\netcoreapp3.0\TcpServer.runtimeconfig.json
+C:\Users\scc\source\repos\TcpIp\TcpServer\bin\Debug\netcoreapp3.0\TcpServer.runtimeconfig.dev.json
+C:\Users\scc\source\repos\TcpIp\TcpServer\bin\Debug\netcoreapp3.0\TcpServer.dll
+C:\Users\scc\source\repos\TcpIp\TcpServer\bin\Debug\netcoreapp3.0\TcpServer.pdb
+C:\Users\scc\source\repos\TcpIp\TcpServer\obj\Debug\netcoreapp3.0\TcpServer.csprojAssemblyReference.cache
+C:\Users\scc\source\repos\TcpIp\TcpServer\obj\Debug\netcoreapp3.0\TcpServer.AssemblyInfoInputs.cache
+C:\Users\scc\source\repos\TcpIp\TcpServer\obj\Debug\netcoreapp3.0\TcpServer.AssemblyInfo.cs
+C:\Users\scc\source\repos\TcpIp\TcpServer\obj\Debug\netcoreapp3.0\TcpServer.dll
+C:\Users\scc\source\repos\TcpIp\TcpServer\obj\Debug\netcoreapp3.0\TcpServer.pdb
