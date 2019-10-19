@@ -7,10 +7,13 @@ namespace TcpIp
     {
         static void Main(string[] args)
         {
-            Connect("127.0.0.1", "Hello Tcp/Ip");
+            while (true)
+            {
+                Connect("192.168.43.37", Console.ReadLine());
+            }
         }
 
-        static void Connect(String server, String message)
+        static void Connect(string server, string message)
         {
             try
             {
@@ -18,11 +21,11 @@ namespace TcpIp
                 // Note, for this client to work you need to have a TcpServer 
                 // connected to the same address as specified by the server, port
                 // combination.
-                Int32 port = 13000;
+                int port = 13000;
                 TcpClient client = new TcpClient(server, port);
 
                 // Translate the passed message into ASCII and store it as a Byte array.
-                Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
+                byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
 
                 // Get a client stream for reading and writing.
                 //  Stream stream = client.GetStream();
@@ -32,18 +35,16 @@ namespace TcpIp
                 // Send the message to the connected TcpServer. 
                 stream.Write(data, 0, data.Length);
 
-                Console.WriteLine("Sent: {0}", message);
-
                 // Receive the TcpServer.response.
 
                 // Buffer to store the response bytes.
-                data = new Byte[256];
+                data = new byte[256];
 
                 // String to store the response ASCII representation.
-                String responseData = String.Empty;
+                string responseData = string.Empty;
 
                 // Read the first batch of the TcpServer response bytes.
-                Int32 bytes = stream.Read(data, 0, data.Length);
+                int bytes = stream.Read(data, 0, data.Length);
                 responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
                 Console.WriteLine("Received: {0}", responseData);
 
@@ -59,9 +60,6 @@ namespace TcpIp
             {
                 Console.WriteLine("SocketException: {0}", e);
             }
-
-            Console.WriteLine("\n Press Enter to continue...");
-            Console.Read();
         }
     }
 }
