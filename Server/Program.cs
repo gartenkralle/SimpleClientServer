@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 
-class MyTcpListener
+class TcpIp
 {
     public static void Main()
     {
