@@ -9,7 +9,7 @@ namespace TcpIp
         {
             while (true)
             {
-                Connect("192.168.43.37", Console.ReadLine());
+                Connect("127.0.0.1", Console.ReadLine());
             }
         }
 
