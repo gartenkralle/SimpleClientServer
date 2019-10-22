@@ -2,60 +2,64 @@
 using System.Net;
 using System.Net.Sockets;
 
-class TcpIp
+namespace TcpIp
 {
-    public static void Main()
+    class Program
     {
-        TcpListener server = null;
-
-        try
+        public static void Main()
         {
-            int port = 13000;
-            IPAddress localAddr = IPAddress.Parse("127.0.0.1");
+            TcpListener server = null;
 
-            server = new TcpListener(localAddr, port);
-
-            server.Start();
-
-            byte[] bytes = new byte[256];
-            string data = null;
-
-            while (true)
+            try
             {
-                Console.Write("Waiting for a connection... ");
+                int port = 13000;
+                IPAddress localAddr = IPAddress.Parse("127.0.0.1");
 
-                TcpClient client = server.AcceptTcpClient();
-                Console.WriteLine("Connected!");
+                server = new TcpListener(localAddr, port);
 
-                data = null;
+                server.Start();
 
-                NetworkStream stream = client.GetStream();
+                byte[] bytes = new byte[256];
+                string data = null;
 
-                int i;
-
-                while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                while (true)
                 {
-                    data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                    Console.WriteLine("Received: {0}", data);
+                    Console.WriteLine("Waiting for a connection... ");
 
-                    data = data.ToUpper();
+                    TcpClient client = server.AcceptTcpClient();
+                    Console.WriteLine("Connected!");
 
-                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
+                    data = null;
 
-                    stream.Write(msg, 0, msg.Length);
-                    Console.WriteLine("Sent: {0}", data);
+                    NetworkStream stream = client.GetStream();
+
+                    int bytesRead;
+
+                    while ((bytesRead = stream.Read(bytes, 0, bytes.Length)) != 0)
+                    {
+                        data = System.Text.Encoding.ASCII.GetString(bytes, 0, bytesRead);
+                        Console.WriteLine("Received: {0}", data);
+
+                        data = data.ToUpper();
+
+                        byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
+
+                        stream.Write(msg, 0, msg.Length);
+                        Console.WriteLine("Sent: {0}", data);
+                    }
+
+                    client.Close();
+                    Console.WriteLine("Disconnected!");
                 }
-
-                client.Close();
             }
-        }
-        catch (SocketException e)
-        {
-            Console.WriteLine("SocketException: {0}", e);
-        }
-        finally
-        {
-            server.Stop();
+            catch (SocketException e)
+            {
+                Console.WriteLine("SocketException: {0}", e);
+            }
+            finally
+            {
+                server.Stop();
+            }
         }
     }
 }

@@ -9,7 +9,10 @@ namespace TcpIp
         {
             while (true)
             {
-                Connect("127.0.0.1", Console.ReadLine());
+                Console.Write("Send: ");
+                string input = Console.ReadLine();
+
+                Connect("127.0.0.1", input);
             }
         }
 
@@ -33,7 +36,6 @@ namespace TcpIp
                 responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
                 Console.WriteLine("Received: {0}", responseData);
 
-                // Close everything.
                 stream.Close();
                 client.Close();
             }
