@@ -4,7 +4,7 @@ using System.Net.Sockets;
 
 namespace TcpIp
 {
-    class Program
+    class ServerProgram
     {
         public static void Main()
         {

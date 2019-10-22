@@ -3,9 +3,9 @@ using System.Net.Sockets;
 
 namespace TcpIp
 {
-    class Program
+    class ClientProgram
     {
-        static void Main(string[] args)
+        static void Main()
         {
             while (true)
             {
