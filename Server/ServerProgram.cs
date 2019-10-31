@@ -6,60 +6,82 @@ namespace TcpIp
 {
     class ServerProgram
     {
+        private TcpClient client;
+
+        private readonly byte[] bytes = new byte[256];
+
+        private readonly TcpListener server;
+
+        NetworkStream stream;
+
+        public ServerProgram()
+        {
+            IPAddress localAddr = IPAddress.Parse("127.0.0.1");
+            server = new TcpListener(localAddr, 13000);
+            server.Start();
+        }
+
         public static void Main()
         {
-            TcpListener server = null;
+            ServerProgram serverProgram = new ServerProgram();
 
-            try
+            while (true)
             {
-                int port = 13000;
-                IPAddress localAddr = IPAddress.Parse("127.0.0.1");
+                serverProgram.Open();
 
-                server = new TcpListener(localAddr, port);
+                string receivedData = serverProgram.Receive();
+                serverProgram.Write("Received", receivedData);
 
-                server.Start();
+                string responseData = serverProgram.Process(receivedData);
 
-                byte[] bytes = new byte[256];
-                string data = null;
+                serverProgram.Send(responseData);
+                serverProgram.Write("Sent", responseData);
 
-                while (true)
-                {
-                    Console.WriteLine("Waiting for a connection... ");
-
-                    TcpClient client = server.AcceptTcpClient();
-                    Console.WriteLine("Connected!");
-
-                    data = null;
-
-                    NetworkStream stream = client.GetStream();
-
-                    int bytesRead;
-
-                    while ((bytesRead = stream.Read(bytes, 0, bytes.Length)) != 0)
-                    {
-                        data = System.Text.Encoding.ASCII.GetString(bytes, 0, bytesRead);
-                        Console.WriteLine("Received: {0}", data);
-
-                        data = data.ToUpper();
-
-                        byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
-
-                        stream.Write(msg, 0, msg.Length);
-                        Console.WriteLine("Sent: {0}", data);
-                    }
-
-                    client.Close();
-                    Console.WriteLine("Disconnected!");
-                }
+                serverProgram.Close();
             }
-            catch (SocketException e)
-            {
-                Console.WriteLine("SocketException: {0}", e);
-            }
-            finally
-            {
-                server.Stop();
-            }
+        }
+
+        private string Process(string data)
+        {
+            return data.ToUpper();
+        }
+
+        private void Open()
+        {
+            Console.WriteLine("Waiting for a connection... ");
+
+            client = server.AcceptTcpClient();
+            Console.WriteLine("Connected!");
+        }
+
+        private void Close()
+        {
+            client.Close();
+            Console.WriteLine("Disconnected!");
+        }
+
+        private void Send(string data)
+        {
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
+
+            stream.Write(msg, 0, msg.Length);
+        }
+
+        private string Receive()
+        {
+            stream = client.GetStream();
+
+            int bytesRead;
+
+            bytesRead = stream.Read(bytes, 0, bytes.Length);
+
+            return System.Text.Encoding.ASCII.GetString(bytes, 0, bytesRead);
+
+        }
+
+        private void Write(string @event, string data)
+        {
+            Console.WriteLine($"{@event}: {data}");
         }
     }
 }

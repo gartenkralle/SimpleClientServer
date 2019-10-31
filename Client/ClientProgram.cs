@@ -5,48 +5,70 @@ namespace TcpIp
 {
     class ClientProgram
     {
+        private TcpClient client;
+        private byte[] data;
+        private NetworkStream stream;
+
         static void Main()
         {
+            ClientProgram clientProgram = new ClientProgram();
+
             while (true)
             {
-                Console.Write("Send: ");
-                string input = Console.ReadLine();
+                string requestData = clientProgram.Read();
 
-                Connect("127.0.0.1", input);
+                clientProgram.Open();
+
+                clientProgram.Send(requestData);
+                string responseData = clientProgram.Receive();
+
+                clientProgram.Close();
+
+                clientProgram.Write(responseData);
             }
         }
 
-        static void Connect(string server, string message)
+        private void Open()
+        {            
+            int port = 13000;
+            client = new TcpClient("127.0.0.1", port);
+        }
+
+        private void Close()
         {
-            try
-            {
-                int port = 13000;
-                TcpClient client = new TcpClient(server, port);
+            stream.Close();
+            client.Close();
+        }
 
-                byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
+        private string Read()
+        {
+            Console.Write("Send: ");
 
-                NetworkStream stream = client.GetStream();
+            return Console.ReadLine();
+        }
 
-                stream.Write(data, 0, data.Length);
+        private void Send(string message)
+        {
+            data = System.Text.Encoding.ASCII.GetBytes(message);
 
-                data = new byte[256];
-                string responseData = string.Empty;
+            stream = client.GetStream();
 
-                int bytes = stream.Read(data, 0, data.Length);
-                responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
-                Console.WriteLine("Received: {0}", responseData);
+            stream.Write(data, 0, data.Length);
+        }
 
-                stream.Close();
-                client.Close();
-            }
-            catch (ArgumentNullException e)
-            {
-                Console.WriteLine("ArgumentNullException: {0}", e);
-            }
-            catch (SocketException e)
-            {
-                Console.WriteLine("SocketException: {0}", e);
-            }
+        private string Receive()
+        {
+            data = new byte[256];
+
+            int bytes = stream.Read(data, 0, data.Length);
+            
+            return System.Text.Encoding.ASCII.GetString(data, 0, bytes);
+
+        }
+
+        private void Write(string message)
+        {
+            Console.WriteLine("Received: {0}", message);
         }
     }
 }
